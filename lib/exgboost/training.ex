@@ -172,11 +172,9 @@ defmodule EXGBoost.Training do
       if early_stopping_rounds && evals_dmats != [] do
         [{_dmat, target_eval} | _tail] = Enum.reverse(evals_dmats)
 
-        # This is still somewhat hacky and relies on a modification made to
-        # XGBoost in the Makefile to dump the config to JSON.
-        #
-        %{"learner" => %{"metrics" => metrics, "default_metric" => default_metric}} =
-          EXGBoost.dump_config(bst) |> Jason.decode!()
+        config = EXGBoost.dump_config(bst) |> Jason.decode!()
+        metrics = get_in(config, ["learner", "metrics"]) || []
+        default_metric = get_in(config, ["learner", "default_metric"])
 
         metric_name =
           cond do
