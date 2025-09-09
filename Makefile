@@ -54,18 +54,24 @@ $(EXGBOOST_CACHE_SO): $(XGBOOST_LIB_DIR_FLAG) $(C_SRCS)
 	$(CC) $(CFLAGS) $(wildcard $(EXGBOOST_DIR)/src/*.c) $(LDFLAGS) -o $(EXGBOOST_CACHE_SO)
 	$(POST_INSTALL)
 
-$(XGBOOST_LIB_DIR_FLAG):
-		rm -rf $(XGBOOST_DIR) && \
-		mkdir -p $(XGBOOST_DIR) && \
-			cd $(XGBOOST_DIR) && \
-			git init && \
-			git remote add origin $(XGBOOST_GIT_REPO) && \
-			git fetch --depth 1 --recurse-submodules origin $(XGBOOST_GIT_REV) && \
-			git checkout FETCH_HEAD && \
-			git submodule update --init --recursive && \
-			cmake -B build -S . -DCMAKE_INSTALL_PREFIX=$(XGBOOST_LIB_DIR) -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja $(CMAKE_FLAGS) && \
-			ninja -C build install
-		touch $(XGBOOST_LIB_DIR_FLAG)
+# This new target handles fetching the source code.
+# It only runs if the .git directory inside the source folder is missing.
+$(XGBOOST_DIR)/.git:
+	mkdir -p $(XGBOOST_DIR) && \
+		cd $(XGBOOST_DIR) && \
+		git init && \
+		git remote add origin $(XGBOOST_GIT_REPO) && \
+		git fetch --depth 1 --recurse-submodules origin $(XGBOOST_GIT_REV) && \
+		git checkout FETCH_HEAD && \
+		git submodule update --init --recursive
+
+# This modified target now depends on the fetch target.
+# It only contains the build commands.
+$(XGBOOST_LIB_DIR_FLAG): $(XGBOOST_DIR)/.git
+	cd $(XGBOOST_DIR) && \
+		cmake -B build -S . -DCMAKE_INSTALL_PREFIX=$(XGBOOST_LIB_DIR) -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja $(CMAKE_FLAGS) && \
+		ninja -C build install
+	touch $(XGBOOST_LIB_DIR_FLAG)
 
 clean:
 	rm -rf $(EXGBOOST_CACHE_SO)
