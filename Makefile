@@ -5,8 +5,8 @@
 TEMP ?= $(HOME)/.cache
 XGBOOST_CACHE ?= $(TEMP)/exgboost
 XGBOOST_GIT_REPO ?= https://github.com/dmlc/xgboost.git
-# 2.0.2 Release Commit
-XGBOOST_GIT_REV ?= 41ce8f28b269dbb7efc70e3a120af3c0bb85efe3
+# v3.0.5 tagged release
+XGBOOST_GIT_REV ?= v3.0.5
 XGBOOST_NS = xgboost-$(XGBOOST_GIT_REV)
 XGBOOST_DIR = $(XGBOOST_CACHE)/$(XGBOOST_NS)
 XGBOOST_LIB_DIR = $(XGBOOST_DIR)/build/xgboost
@@ -63,9 +63,8 @@ $(XGBOOST_LIB_DIR_FLAG):
 			git fetch --depth 1 --recurse-submodules origin $(XGBOOST_GIT_REV) && \
 			git checkout FETCH_HEAD && \
 			git submodule update --init --recursive && \
-			sed 's|learner_parameters\["generic_param"\] = ToJson(ctx_);|&\nlearner_parameters\["default_metric"\] = String(obj_->DefaultEvalMetric());|' src/learner.cc > src/learner.cc.tmp && mv src/learner.cc.tmp src/learner.cc && \
-			cmake -DCMAKE_INSTALL_PREFIX=$(XGBOOST_LIB_DIR) -B build . $(CMAKE_FLAGS) && \
-			make -C build -j1 install
+			cmake -B build -S . -DCMAKE_INSTALL_PREFIX=$(XGBOOST_LIB_DIR) -DCMAKE_BUILD_TYPE=RelWithDebInfo -GNinja $(CMAKE_FLAGS) && \
+			ninja -C build install
 		touch $(XGBOOST_LIB_DIR_FLAG)
 
 clean:
