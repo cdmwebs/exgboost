@@ -32,7 +32,7 @@ defmodule EXGBoost.Training do
       verbose_eval: verbose_eval
     ] = opts |> Keyword.validate!(valid_opts) |> Enum.sort()
 
-    unless is_nil(learning_rates) or is_function(learning_rates, 1) or is_list(learning_rates) do
+    if !(is_nil(learning_rates) or is_function(learning_rates, 1) or is_list(learning_rates)) do
       raise ArgumentError, "learning_rates must be a function/1 or a list"
     end
 
