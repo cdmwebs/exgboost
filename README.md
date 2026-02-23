@@ -59,7 +59,7 @@ EXGBoost.predict(model, x)
 
 EXGBoost is designed to feel familiar to the users of the Python XGBoost library. `EXGBoost.train/2` is the
 primary entry point for training a model. It accepts a Nx tensor for the features and a Nx tensor for the labels.
-`EXGBoost.train/2` returns a trained`Booster` struct that can be used for prediction. `EXGBoost.train/2` also
+`EXGBoost.train/2` returns a trained `Booster` struct that can be used for prediction. `EXGBoost.train/2` also
 accepts a keyword list of options that can be used to configure the training process. See the
 [XGBoost documentation](https://xgboost.readthedocs.io/en/latest/parameter.html) for the full list of options.
 
@@ -175,7 +175,7 @@ preds = EXGBoost.train(X, y) |> EXGBoost.predict(X)
 
 ### Precompiled Distribution
 
-We currenly offer the following precompiled packages for EXGBoost:
+We currently offer the following precompiled packages for EXGBoost:
 
 ```elixir
 %{
@@ -220,3 +220,13 @@ You also need to set `CC_PRECOMPILER_PRECOMPILE_ONLY_LOCAL=true` before the firs
 ## License
 
 Licensed under an [Apache-2](https://github.com/acalejos/exgboost/blob/main/LICENSE) license.
+
+## Maintaining this fork
+
+Recommended fork maintenance cadence:
+
+- Keep dependencies current with Dependabot PRs (configured in `.github/dependabot.yml`).
+- Ensure all PRs pass CI (`.github/workflows/ci.yml`) before merge.
+- Keep precompiled artefacts and checksums aligned with each release tag (`.github/workflows/precompile.yml`).
+- When upgrading `nx`, verify supported Elixir/OTP versions in CI matrix and `mix.exs`.
+
