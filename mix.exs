@@ -49,7 +49,7 @@ defmodule EXGBoost.MixProject do
       {:nimble_options, "~> 1.0"},
       {:nx, "~> 0.7"},
       {:jason, "~> 1.3"},
-      {:ex_doc, "~> 0.31.0", only: :docs},
+      {:ex_doc, "~> 0.40", only: :docs},
       {:cc_precompiler, "~> 0.1.0", runtime: false},
       {:exterval, "0.2.0"},
       {:ex_json_schema, "~> 0.11.0"},
