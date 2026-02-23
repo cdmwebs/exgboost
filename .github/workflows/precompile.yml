@@ -12,7 +12,7 @@ jobs:
       MIX_ENV: "prod"
     strategy:
       matrix:
-        otp: ["27.0", "28.0"]
+        otp: ["27.3", "28.3"]
         elixir: ["1.18.4"]
     steps:
       - uses: actions/checkout@v3
