@@ -15,7 +15,7 @@ defmodule EXGBoost.MixProject do
       make_precompiler_nif_versions: [
         versions: ["2.15", "2.16", "2.17"]
       ],
-      elixir: "~> 1.14",
+      elixir: "~> 1.17",
       start_permanent: Mix.env() == :prod,
       compilers: [:elixir_make] ++ Mix.compilers(),
       deps: deps(),
@@ -24,16 +24,16 @@ defmodule EXGBoost.MixProject do
       homepage_url: "https://github.com/acalejos/exgboost",
       docs: docs(),
       package: package(),
-      preferred_cli_env: [
-        docs: :docs,
-        "hex.publish": :docs
-      ],
       before_closing_body_tag: &before_closing_body_tag/1,
       name: "EXGBoost",
       description:
         "Elixir bindings for the XGBoost library. `EXGBoost` provides an implementation of XGBoost that works with
       [Nx](https://hexdocs.pm/nx/Nx.html) tensors."
     ]
+  end
+
+  def cli do
+    [preferred_envs: [docs: :docs, "hex.publish": :docs]]
   end
 
   def application do
